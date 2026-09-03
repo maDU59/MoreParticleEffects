@@ -10,6 +10,10 @@ import net.minecraft.resources.Identifier;
 public class EmitterRegistry {
     private static Map<EmitterEvent, Map<Identifier, EmitterData>> emitters = new HashMap<>();
 
+    public static void clear() {
+        emitters.clear();
+    }
+
     public static void registerEmitter(EmitterEvent event, EmitterData data) {
         if (!emitters.containsKey(event)) {
             emitters.put(event, new HashMap<>());

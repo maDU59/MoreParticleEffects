@@ -3,6 +3,7 @@ package fr.madu59.moreparticleeffects.client.resources.loader;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import fr.madu59.moreparticleeffects.client.registry.EmitterRegistry;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -20,7 +21,7 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
 
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager resourceManager, ProfilerFiller profiler) {
-        // clear()
+        EmitterRegistry.clear();
 
         for (Map.Entry<Identifier, JsonElement> entry : prepared.entrySet()) {
       
