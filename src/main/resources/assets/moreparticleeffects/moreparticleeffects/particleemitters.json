@@ -10,7 +10,7 @@
         },
         "conditions": {
             "onTill": {
-                "block": ["minecraft:grass_block", "minecraft:dirt"]
+                "blocks": ["minecraft:grass_block", "minecraft:dirt"]
             }
         }
     }

@@ -30,12 +30,12 @@ public class BlockMixin implements BlockInterface {
 
     @Override
     public void onPlace(LevelAccessor level, BlockState state, BlockPos pos) {
-        
+        EmitterEvent.ON_PLACE.call(EmitterContext.onPlace(level, state, pos));
     }
 
     @Override
     public void onFlatten(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
-        
+        EmitterEvent.ON_FLATTEN.call(EmitterContext.onFlatten(level, oldBlock, newBlock, pos));
     }
 
     @Override
@@ -88,11 +88,4 @@ public class BlockMixin implements BlockInterface {
             onFlatten(level, oldBlock, newBlock, pos);
         }
     }
-
-    // @Inject(method = "playerWillDestroy", at = @At("HEAD"))
-    // private void mpe$playerWillDestroy(final Level level, final BlockPos pos, final BlockState state, final Player player, CallbackInfoReturnable<Boolean> cir) {
-    //     if(level.isClientSide()) {
-    //         onBreakByPlayer(level, state, pos);
-    //     }
-    // }
 }

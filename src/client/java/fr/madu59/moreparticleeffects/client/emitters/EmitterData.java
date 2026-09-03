@@ -8,9 +8,9 @@ public class EmitterData {
     private Identifier id;
     private Predicate<EmitterContext> predicate;
 
-    public EmitterData(Identifier id, Predicate<EmitterContext> predicate) {
-        this.id = id;
-        this.predicate = predicate;
+    public EmitterData(EmitterDataBuilder builder) {
+        this.id = builder.id;
+        this.predicate = builder.predicate;
     }
 
     public Identifier getId() {
