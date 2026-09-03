@@ -1,5 +1,5 @@
 {
-    "dirt_tilling": {
+    "test_exemple": {
         "particle": {
             "template": "",
             "parameters": {}
@@ -11,6 +11,9 @@
         "conditions": {
             "onTill": {
                 "blocks": ["minecraft:grass_block", "minecraft:dirt"]
+            },
+            "onStrip": {
+                "blocks": ["#minecraft:birch_logs"]
             }
         }
     }

@@ -42,7 +42,7 @@ public class BlockUtil {
             return false;
         }
         else if(entry.startsWith("#")) {
-            Identifier tagId = Identifier.tryParse(entry);
+            Identifier tagId = Identifier.tryParse(entry.substring(1));
 
             TagKey<Block> tag = TagKey.create(
                 Registries.BLOCK, 
