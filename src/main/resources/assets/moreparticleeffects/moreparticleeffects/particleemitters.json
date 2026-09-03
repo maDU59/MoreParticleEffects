@@ -9,11 +9,8 @@
             "size": [1, 1, 1]
         },
         "conditions": {
-            "block_state": {
-                "block": "minecraft:dirt",
-                "properties": {
-                    "moisture": "0"
-                }
+            "onTill": {
+                "block": ["minecraft:grass_block", "minecraft:dirt"]
             }
         }
     }

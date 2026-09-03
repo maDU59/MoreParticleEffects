@@ -1,4 +1,4 @@
-package fr.madu59.moreparticleeffects.client.particleemitters;
+package fr.madu59.moreparticleeffects.client.emitters;
 
 public enum EmitterShape {
     SPHERE,

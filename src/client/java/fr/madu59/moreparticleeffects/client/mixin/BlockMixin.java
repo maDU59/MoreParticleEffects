@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import fr.madu59.moreparticleeffects.client.emitters.EmitterContext;
+import fr.madu59.moreparticleeffects.client.emitters.EmitterEvent;
 import fr.madu59.moreparticleeffects.client.interfaces.BlockInterface;
 import net.fabricmc.fabric.mixin.content.registry.AxeItemAccessor;
 import net.fabricmc.fabric.mixin.content.registry.HoeItemAccessor;
@@ -23,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class BlockMixin implements BlockInterface {
     @Override
     public void onBreak(LevelAccessor level, BlockState state, BlockPos pos) {
-        
+        EmitterEvent.ON_BREAK.call(EmitterContext.onBreak(level, state, pos));
     }
 
     @Override
@@ -32,17 +34,17 @@ public class BlockMixin implements BlockInterface {
     }
 
     @Override
-    public void onFlatten(LevelAccessor level, Block oldBlock, Block newBlock) {
+    public void onFlatten(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         
     }
 
     @Override
-    public void onTill(LevelAccessor level, Block oldBlock, Block newBlock) {
+    public void onTill(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         
     }
 
     @Override
-    public void onStrip(LevelAccessor level, Block oldBlock, Block newBlock) {
+    public void onStrip(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         
     }
 
@@ -57,14 +59,14 @@ public class BlockMixin implements BlockInterface {
     }
 
     @Override
-    public void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock) {
-        onBlockChangeInternal(level, oldBlock, newBlock);
+    public void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
+        onBlockChangeInternal(level, oldBlock, newBlock, pos);
     }
 
     @Unique
     private void onStateChangeInternal(LevelAccessor level, BlockState oldState, BlockState newState, BlockPos pos) {
         if(oldState.getBlock() != newState.getBlock()) {
-            onBlockChange(level, oldState.getBlock(), newState.getBlock());
+            onBlockChange(level, oldState.getBlock(), newState.getBlock(), pos);
             if(newState.isAir()) {
                 onBreak(level, oldState, pos);
             }
@@ -74,15 +76,15 @@ public class BlockMixin implements BlockInterface {
         }
     }
 
-    @Unique void onBlockChangeInternal(LevelAccessor level, Block oldBlock, Block newBlock) {
+    @Unique void onBlockChangeInternal(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         if(AxeItemAccessor.getStrippables().containsKey(oldBlock) && AxeItemAccessor.getStrippables().get(oldBlock) == newBlock) {
-            onStrip(level, oldBlock, newBlock);
+            onStrip(level, oldBlock, newBlock, pos);
         }
         else if(HoeItemAccessor.getTillables().containsKey(oldBlock) && (newBlock == Blocks.FARMLAND || newBlock == Blocks.DIRT_PATH)) {
-            onTill(level, oldBlock, newBlock);
+            onTill(level, oldBlock, newBlock, pos);
         }
         else if(ShovelItemAccessor.getFlattenables().containsKey(oldBlock) && ShovelItemAccessor.getFlattenables().get(oldBlock).getBlock() == newBlock) {
-            onFlatten(level, oldBlock, newBlock);
+            onFlatten(level, oldBlock, newBlock, pos);
         }
     }
 
