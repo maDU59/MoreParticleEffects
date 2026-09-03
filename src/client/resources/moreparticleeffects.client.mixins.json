@@ -3,6 +3,7 @@
 	"package": "fr.madu59.moreparticleeffects.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
+		"BlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

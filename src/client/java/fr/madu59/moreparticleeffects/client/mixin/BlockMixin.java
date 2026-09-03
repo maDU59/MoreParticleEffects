@@ -1,0 +1,98 @@
+package fr.madu59.moreparticleeffects.client.mixin;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import fr.madu59.moreparticleeffects.client.interfaces.BlockInterface;
+import net.fabricmc.fabric.mixin.content.registry.AxeItemAccessor;
+import net.fabricmc.fabric.mixin.content.registry.HoeItemAccessor;
+import net.fabricmc.fabric.mixin.content.registry.ShovelItemAccessor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+
+@Mixin(Block.class)
+public class BlockMixin implements BlockInterface {
+    @Override
+    public void onBreak(LevelAccessor level, BlockState state, BlockPos pos) {
+        
+    }
+
+    @Override
+    public void onPlace(LevelAccessor level, BlockState state, BlockPos pos) {
+        
+    }
+
+    @Override
+    public void onFlatten(LevelAccessor level, Block oldBlock, Block newBlock) {
+        
+    }
+
+    @Override
+    public void onTill(LevelAccessor level, Block oldBlock, Block newBlock) {
+        
+    }
+
+    @Override
+    public void onStrip(LevelAccessor level, Block oldBlock, Block newBlock) {
+        
+    }
+
+    @Override
+    public void onBreakByPlayer(LevelAccessor level, BlockState state, BlockPos pos) {
+        
+    }
+
+    @Override
+    public void onStateChange(LevelAccessor level, BlockState oldState, BlockState newState, BlockPos pos) {
+        onStateChangeInternal(level, oldState, newState, pos);
+    }
+
+    @Override
+    public void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock) {
+        onBlockChangeInternal(level, oldBlock, newBlock);
+    }
+
+    @Unique
+    private void onStateChangeInternal(LevelAccessor level, BlockState oldState, BlockState newState, BlockPos pos) {
+        if(oldState.getBlock() != newState.getBlock()) {
+            onBlockChange(level, oldState.getBlock(), newState.getBlock());
+            if(newState.isAir()) {
+                onBreak(level, oldState, pos);
+            }
+            else {
+                onPlace(level, newState, pos);
+            }
+        }
+    }
+
+    @Unique void onBlockChangeInternal(LevelAccessor level, Block oldBlock, Block newBlock) {
+        if(AxeItemAccessor.getStrippables().containsKey(oldBlock) && AxeItemAccessor.getStrippables().get(oldBlock) == newBlock) {
+            onStrip(level, oldBlock, newBlock);
+        }
+        else if(HoeItemAccessor.getTillables().containsKey(oldBlock) && (newBlock == Blocks.FARMLAND || newBlock == Blocks.DIRT_PATH)) {
+            onTill(level, oldBlock, newBlock);
+        }
+        else if(ShovelItemAccessor.getFlattenables().containsKey(oldBlock) && ShovelItemAccessor.getFlattenables().get(oldBlock).getBlock() == newBlock) {
+            onFlatten(level, oldBlock, newBlock);
+        }
+    }
+
+    @Inject(method = "playerWillDestroy", at = @At("HEAD"))
+    public void mpe$playerWillDestroy(final Level level, final BlockPos pos, final BlockState state, final Player player, CallbackInfoReturnable<Boolean> cir) {
+        onBreakByPlayer(level, state, pos);
+    }
+
+    @Inject(method = "updateOrDestroy", at = @At("HEAD"))
+    public void mpe$updateOrDestroy(final BlockState blockState, final BlockState newState, final LevelAccessor level, final BlockPos blockPos, final @Block.UpdateFlags int updateFlags, final int updateLimit, CallbackInfo ci) {
+        onStateChange(level, blockState, newState, blockPos);
+    }
+}
