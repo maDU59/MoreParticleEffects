@@ -1,31 +1,30 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "moreparticleeffects",
 	"version": "${version}",
-	"name": "Example Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "More Particle Effects",
+	"description": "Adds a bunch of particle effects to the game, as well as resource-pack support.",
 	"authors": [
-		"Me!"
+		"maDU59_"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
-	"environment": "*",
+	"icon": "assets/moreparticleeffects/icon.png",
+	"environment": "client",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"fr.madu59.moreparticleeffects.MoreParticleEffects"
 		],
 		"client": [
-			"com.example.client.ExampleModClient"
+			"fr.madu59.moreparticleeffects.client.MoreParticleEffectsClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "moreparticleeffects.client.mixins.json",
 			"environment": "client"
 		}
 	],
