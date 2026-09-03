@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "fr.madu59.client.mixin",
+	"package": "fr.madu59.moreparticleeffects.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
 	],

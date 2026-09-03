@@ -1,4 +1,4 @@
-package fr.madu59;
+package fr.madu59.moreparticleeffects;
 
 import net.fabricmc.api.ModInitializer;
 
