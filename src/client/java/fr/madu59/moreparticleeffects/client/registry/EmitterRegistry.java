@@ -19,6 +19,7 @@ public class EmitterRegistry {
             emitters.put(event, new HashMap<>());
         }
         emitters.get(event).put(data.getId(), data);
+        System.out.println("Registered emitter: " + data.getId());
     }
 
     public static Map<Identifier, EmitterData> getEmitters(EmitterEvent event) {

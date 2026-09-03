@@ -40,12 +40,12 @@ public class BlockMixin implements BlockInterface {
 
     @Override
     public void onTill(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
-        
+        EmitterEvent.ON_TILL.call(EmitterContext.onTill(level, oldBlock, newBlock, pos));
     }
 
     @Override
     public void onStrip(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
-        
+        EmitterEvent.ON_STRIP.call(EmitterContext.onStrip(level, oldBlock, newBlock, pos));
     }
 
     @Override
@@ -76,7 +76,8 @@ public class BlockMixin implements BlockInterface {
         }
     }
 
-    @Unique void onBlockChangeInternal(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
+    @Unique 
+    private void onBlockChangeInternal(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         if(AxeItemAccessor.getStrippables().containsKey(oldBlock) && AxeItemAccessor.getStrippables().get(oldBlock) == newBlock) {
             onStrip(level, oldBlock, newBlock, pos);
         }
@@ -88,13 +89,10 @@ public class BlockMixin implements BlockInterface {
         }
     }
 
-    @Inject(method = "playerWillDestroy", at = @At("HEAD"))
-    public void mpe$playerWillDestroy(final Level level, final BlockPos pos, final BlockState state, final Player player, CallbackInfoReturnable<Boolean> cir) {
-        onBreakByPlayer(level, state, pos);
-    }
-
-    @Inject(method = "updateOrDestroy", at = @At("HEAD"))
-    public void mpe$updateOrDestroy(final BlockState blockState, final BlockState newState, final LevelAccessor level, final BlockPos blockPos, final @Block.UpdateFlags int updateFlags, final int updateLimit, CallbackInfo ci) {
-        onStateChange(level, blockState, newState, blockPos);
-    }
+    // @Inject(method = "playerWillDestroy", at = @At("HEAD"))
+    // private void mpe$playerWillDestroy(final Level level, final BlockPos pos, final BlockState state, final Player player, CallbackInfoReturnable<Boolean> cir) {
+    //     if(level.isClientSide()) {
+    //         onBreakByPlayer(level, state, pos);
+    //     }
+    // }
 }

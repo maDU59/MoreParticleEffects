@@ -18,6 +18,17 @@ public enum EmitterEvent {
                 System.out.println("Emitter " + data.getId() + " triggered for event " + this.name());
             }
         }
+    }
 
+    public static EmitterEvent fromString(String name) {
+        if (name == null || name.isEmpty()) return null;
+
+        String normalized = name.replaceAll("([a-z])([A-Z])", "$1_$2").toUpperCase();
+
+        try {
+            return EmitterEvent.valueOf(normalized);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

@@ -25,4 +25,16 @@ public class EmitterContext {
         context.pos = pos;
         return context;
     }
+
+    public static EmitterContext onTill(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
+        EmitterContext context = new EmitterContext();
+        context.oldBlock = oldBlock;
+        context.newBlock = newBlock;
+        context.pos = pos;
+        return context;
+    }
+
+    public static EmitterContext onStrip(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
+        return onTill(level, oldBlock, newBlock, pos);
+    }
 }
