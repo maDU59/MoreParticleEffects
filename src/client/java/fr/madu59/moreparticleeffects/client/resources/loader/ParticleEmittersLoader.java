@@ -6,26 +6,15 @@ import com.google.gson.JsonObject;
 import fr.madu59.moreparticleeffects.client.emitters.EmitterContext;
 import fr.madu59.moreparticleeffects.client.emitters.EmitterDataBuilder;
 import fr.madu59.moreparticleeffects.client.emitters.EmitterEvent;
+import fr.madu59.moreparticleeffects.client.emitters.EmitterShape;
 import fr.madu59.moreparticleeffects.client.registry.EmitterRegistry;
 import fr.madu59.moreparticleeffects.client.util.BlockUtil;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.level.block.AbstractCauldronBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.WallBlock;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -96,10 +85,14 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
 
         EmitterDataBuilder emitterDataBuilder = new EmitterDataBuilder(emitterId);
 
+        if(emitterConfig.has("shape")) {
+            parseShape(emitterConfig.get("shape").getAsJsonObject(), emitterDataBuilder);
+        }
+
         for(Entry<String, JsonElement> conditionEntry : emitterConfig.getAsJsonObject("conditions").entrySet()) {
             EmitterEvent event = EmitterEvent.fromString(conditionEntry.getKey());
 
-            Predicate<EmitterContext> conditionPredicate = getConditionPredicate(event, conditionEntry.getValue().getAsJsonObject());
+            Predicate<EmitterContext> conditionPredicate = parseConditionPredicate(event, conditionEntry.getValue().getAsJsonObject());
 
             if(event != null) {
                 emitterDataBuilder.setPredicate(conditionPredicate);
@@ -108,8 +101,8 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
         }
     }
 
-    public Predicate<EmitterContext> getConditionPredicate(EmitterEvent event, JsonObject conditionConfig) {
-        if(event == EmitterEvent.ON_TILL || event == EmitterEvent.ON_FLATTEN || event == EmitterEvent.ON_STRIP) {
+    private Predicate<EmitterContext> parseConditionPredicate(EmitterEvent event, JsonObject conditionConfig) {
+        if(event == EmitterEvent.ON_TILL || event == EmitterEvent.ON_FLATTEN || event == EmitterEvent.ON_STRIP || event == EmitterEvent.ON_ANIMATE_TICK) {
             if(conditionConfig.has("blocks")) {
                 return (ctx) -> {
                     return BlockUtil.isValidBlock(conditionConfig.get("blocks").getAsJsonArray(), ctx.getOldBlock());
@@ -121,6 +114,22 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
                 };
             }
         }
-        return (ctx) -> true;
+        return (ctx) -> false;
+    }
+
+    private EmitterDataBuilder parseShape(JsonObject shapeElement, EmitterDataBuilder emitterDataBuilder) {
+        if(shapeElement.has("type")) {
+            String shapeType = shapeElement.get("type").getAsString();
+            emitterDataBuilder.setShape(EmitterShape.fromString(shapeType));
+        }
+        if(shapeElement.has("size")) {
+            if(shapeElement.get("size").isJsonArray()) {
+                emitterDataBuilder.setSize(EmitterShape.getSizeFromIterable(shapeElement.get("size").getAsJsonArray()));
+            }
+            else if(shapeElement.get("size").isJsonPrimitive()) {
+                emitterDataBuilder.setSize(shapeElement.get("size").getAsFloat());
+            }
+        }
+        return emitterDataBuilder;
     }
 }

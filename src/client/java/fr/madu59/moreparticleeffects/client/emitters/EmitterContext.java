@@ -11,9 +11,11 @@ public class EmitterContext {
     public Block oldBlock;
     public Block newBlock;
     public BlockPos pos;
+    public LevelAccessor level;
 
     public static EmitterContext onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock) {
         EmitterContext context = new EmitterContext();
+        context.level = level;
         context.oldBlock = oldBlock;
         context.newBlock = newBlock;
         return context;
@@ -21,6 +23,7 @@ public class EmitterContext {
 
     public static EmitterContext onBreak(LevelAccessor level, BlockState oldState, BlockPos pos) {
         EmitterContext context = new EmitterContext();
+        context.level = level;
         context.oldState = oldState;
         context.pos = pos;
         return context;
@@ -28,6 +31,7 @@ public class EmitterContext {
 
     public static EmitterContext onPlace(LevelAccessor level, BlockState newState, BlockPos pos) {
         EmitterContext context = new EmitterContext();
+        context.level = level;
         context.newState = newState;
         context.pos = pos;
         return context;
@@ -35,6 +39,7 @@ public class EmitterContext {
 
     public static EmitterContext onTill(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         EmitterContext context = new EmitterContext();
+        context.level = level;
         context.oldBlock = oldBlock;
         context.newBlock = newBlock;
         context.pos = pos;
@@ -47,6 +52,15 @@ public class EmitterContext {
 
     public static EmitterContext onFlatten(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         return onTill(level, oldBlock, newBlock, pos);
+    }
+
+    public static EmitterContext onAnimateTick(LevelAccessor level, BlockState state, BlockPos pos) {
+        EmitterContext context = new EmitterContext();
+        context.level = level;
+        context.oldState = state;
+        context.oldBlock = state.getBlock();
+        context.pos = pos;
+        return context;
     }
 
     public Block getOldBlock() {

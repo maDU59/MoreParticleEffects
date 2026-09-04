@@ -14,4 +14,5 @@ public interface BlockInterface {
     void onBreakByPlayer(LevelAccessor level, BlockState state, BlockPos pos);
     void onStateChange(LevelAccessor level, BlockState oldState, BlockState newState, BlockPos pos);
     void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos);
+    void onAnimateTick(LevelAccessor level, BlockState state, BlockPos pos);
 }

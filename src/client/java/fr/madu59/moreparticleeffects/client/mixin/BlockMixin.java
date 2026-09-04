@@ -5,7 +5,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import fr.madu59.moreparticleeffects.client.emitters.EmitterContext;
 import fr.madu59.moreparticleeffects.client.emitters.EmitterEvent;
@@ -14,7 +13,7 @@ import net.fabricmc.fabric.mixin.content.registry.AxeItemAccessor;
 import net.fabricmc.fabric.mixin.content.registry.HoeItemAccessor;
 import net.fabricmc.fabric.mixin.content.registry.ShovelItemAccessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -46,6 +45,11 @@ public class BlockMixin implements BlockInterface {
     @Override
     public void onStrip(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         EmitterEvent.ON_STRIP.call(EmitterContext.onStrip(level, oldBlock, newBlock, pos));
+    }
+
+    @Override
+    public void onAnimateTick(LevelAccessor level, BlockState state, BlockPos pos) {
+        EmitterEvent.ON_ANIMATE_TICK.call(EmitterContext.onAnimateTick(level, state, pos));
     }
 
     @Override
@@ -87,5 +91,10 @@ public class BlockMixin implements BlockInterface {
         else if(ShovelItemAccessor.getFlattenables().containsKey(oldBlock) && ShovelItemAccessor.getFlattenables().get(oldBlock).getBlock() == newBlock) {
             onFlatten(level, oldBlock, newBlock, pos);
         }
+    }
+
+    @Inject(method = "animateTick", at = @At("HEAD"))
+    private void mpe$animateTick(final BlockState state, final Level level, final BlockPos pos, final RandomSource random, CallbackInfo ci) {
+        onAnimateTick(level, state, pos);
     }
 }
