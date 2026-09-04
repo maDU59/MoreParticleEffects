@@ -63,6 +63,18 @@ public class EmitterContext {
         return context;
     }
 
+    public static EmitterContext onOpen(LevelAccessor level, Block block, BlockPos pos) {
+        EmitterContext context = new EmitterContext();
+        context.level = level;
+        context.oldBlock = block;
+        context.pos = pos;
+        return context;
+    }
+
+    public static EmitterContext onClose(LevelAccessor level, Block block, BlockPos pos) {
+        return onOpen(level, block, pos);
+    }
+
     public Block getOldBlock() {
         return oldBlock;
     }

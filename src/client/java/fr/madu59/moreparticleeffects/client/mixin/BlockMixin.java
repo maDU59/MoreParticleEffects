@@ -70,12 +70,12 @@ public class BlockMixin implements BlockInterface {
 
     @Override
     public void onOpen(LevelAccessor level, Block block, BlockPos pos) {
-
+        EmitterEvent.ON_OPEN.call(EmitterContext.onOpen(level, block, pos));
     }
 
     @Override
     public void onClose(LevelAccessor level, Block block, BlockPos pos) {
-
+        EmitterEvent.ON_CLOSE.call(EmitterContext.onClose(level, block, pos));
     }
 
     @Unique

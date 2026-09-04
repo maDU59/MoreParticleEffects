@@ -106,7 +106,7 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
     private EmitterDataBuilder parseCondition(Identifier emitterId, EmitterEvent event, JsonObject conditionConfig, EmitterDataBuilder emitterDataBuilder) {
         Predicate<EmitterContext> conditionPredicate = null;
 
-        if(event == EmitterEvent.ON_TILL || event == EmitterEvent.ON_FLATTEN || event == EmitterEvent.ON_STRIP || event == EmitterEvent.ON_ANIMATE_TICK) {
+        if(event == EmitterEvent.ON_TILL || event == EmitterEvent.ON_FLATTEN || event == EmitterEvent.ON_STRIP || event == EmitterEvent.ON_ANIMATE_TICK || event == EmitterEvent.ON_OPEN || event == EmitterEvent.ON_CLOSE) {
             if(conditionConfig.has("blocks")) {
                 conditionPredicate = (ctx) -> {
                     return BlockUtil.isValidBlock(conditionConfig.get("blocks").getAsJsonArray(), ctx.getOldBlock());

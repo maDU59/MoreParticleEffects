@@ -18,6 +18,9 @@
             },
             "onAnimateTick": {
                 "blocks": ["#minecraft:oak_logs"]
+            },
+            "onOpen": {
+                "blocks": ["minecraft:chest"]
             }
         }
     }
