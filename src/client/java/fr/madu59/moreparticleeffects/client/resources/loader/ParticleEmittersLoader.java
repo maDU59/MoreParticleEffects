@@ -125,6 +125,9 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
         if(conditionConfig.has("probability")) {
             emitterDataBuilder.setProbability(conditionConfig.get("probability").getAsFloat());
         }
+        else{
+            emitterDataBuilder.resetProbability();
+        }
 
         return emitterDataBuilder;
     }

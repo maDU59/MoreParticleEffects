@@ -7,11 +7,13 @@ import org.joml.Vector3f;
 import net.minecraft.resources.Identifier;
 
 public class EmitterDataBuilder {
+    private static final float DEFAULT_PROBABILITY = 1.0f;
+    
     protected Identifier id = null;
     protected Predicate<EmitterContext> predicate = (ctx) -> true;
     protected EmitterShape shape = EmitterShape.CUBE;
-    protected Vector3f size = new Vector3f(0, 0, 0);
-    protected float probability = 1.0f;
+    protected Vector3f size = new Vector3f(1, 1, 1);
+    protected float probability = DEFAULT_PROBABILITY;
 
     public EmitterDataBuilder(Identifier id) {
         this.id = id;
@@ -39,6 +41,11 @@ public class EmitterDataBuilder {
 
     public EmitterDataBuilder setProbability(float probability) {
         this.probability = probability;
+        return this;
+    }
+
+    public EmitterDataBuilder resetProbability() {
+        this.probability = DEFAULT_PROBABILITY;
         return this;
     }
 

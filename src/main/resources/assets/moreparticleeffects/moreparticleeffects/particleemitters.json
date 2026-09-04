@@ -5,12 +5,13 @@
             "parameters": {}
         },
         "shape": {
-            "type": "cube",
-            "size": [1, 1, 1]
+            "type": "sphere",
+            "size": [1.5, 1.5, 1.5]
         },
         "conditions": {
             "onTill": {
-                "blocks": ["minecraft:grass_block", "minecraft:dirt"]
+                "blocks": ["minecraft:grass_block", "minecraft:dirt"],
+                "probability": 0.5
             },
             "onStrip": {
                 "blocks": ["#minecraft:birch_logs"]
