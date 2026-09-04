@@ -4,7 +4,10 @@
 	"compatibilityLevel": "JAVA_25",
 	"client": [
 		"BlockMixin",
-		"LevelMixin"
+		"LevelMixin",
+		"block.entity.ChestBlockEntityMixin",
+		"block.entity.EnderChestBlockEntityMixin",
+		"block.entity.ShulkerBoxBlockEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

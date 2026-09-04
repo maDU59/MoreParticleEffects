@@ -86,7 +86,7 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
         EmitterDataBuilder emitterDataBuilder = new EmitterDataBuilder(emitterId);
 
         if(emitterConfig.has("shape")) {
-            emitterDataBuilder = parseShape(emitterConfig.get("shape").getAsJsonObject(), emitterDataBuilder);
+            parseShape(emitterConfig.get("shape").getAsJsonObject(), emitterDataBuilder);
         }
 
         for(Entry<String, JsonElement> conditionEntry : emitterConfig.getAsJsonObject("conditions").entrySet()) {
@@ -97,7 +97,7 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
                 continue;
             }
 
-            emitterDataBuilder = parseCondition(emitterId, event, conditionEntry.getValue().getAsJsonObject(), emitterDataBuilder);
+            parseCondition(emitterId, event, conditionEntry.getValue().getAsJsonObject(), emitterDataBuilder);
 
             EmitterRegistry.registerEmitter(event, emitterDataBuilder.build());
         }

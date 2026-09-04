@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(Block.class)
@@ -65,6 +66,16 @@ public class BlockMixin implements BlockInterface {
     @Override
     public void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos) {
         onBlockChangeInternal(level, oldBlock, newBlock, pos);
+    }
+
+    @Override
+    public void onOpen(LevelAccessor level, Block block, BlockPos pos) {
+
+    }
+
+    @Override
+    public void onClose(LevelAccessor level, Block block, BlockPos pos) {
+
     }
 
     @Unique

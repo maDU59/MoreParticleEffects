@@ -15,4 +15,6 @@ public interface BlockInterface {
     void onStateChange(LevelAccessor level, BlockState oldState, BlockState newState, BlockPos pos);
     void onBlockChange(LevelAccessor level, Block oldBlock, Block newBlock, BlockPos pos);
     void onAnimateTick(LevelAccessor level, BlockState state, BlockPos pos);
+    void onOpen(LevelAccessor level, Block block, BlockPos pos);
+    void onClose(LevelAccessor level, Block block, BlockPos pos);
 }

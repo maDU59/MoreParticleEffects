@@ -1,7 +1,5 @@
 package fr.madu59.moreparticleeffects.client.util;
 
-import java.util.Iterator;
-
 import com.google.gson.JsonElement;
 
 import net.minecraft.core.Holder;
