@@ -86,35 +86,47 @@ public class ParticleEmittersLoader extends SimpleJsonResourceReloadListener<Jso
         EmitterDataBuilder emitterDataBuilder = new EmitterDataBuilder(emitterId);
 
         if(emitterConfig.has("shape")) {
-            parseShape(emitterConfig.get("shape").getAsJsonObject(), emitterDataBuilder);
+            emitterDataBuilder = parseShape(emitterConfig.get("shape").getAsJsonObject(), emitterDataBuilder);
         }
 
         for(Entry<String, JsonElement> conditionEntry : emitterConfig.getAsJsonObject("conditions").entrySet()) {
             EmitterEvent event = EmitterEvent.fromString(conditionEntry.getKey());
 
-            Predicate<EmitterContext> conditionPredicate = parseConditionPredicate(event, conditionEntry.getValue().getAsJsonObject());
-
-            if(event != null) {
-                emitterDataBuilder.setPredicate(conditionPredicate);
-                EmitterRegistry.registerEmitter(event, emitterDataBuilder.build());
+            if(event == null) {
+                System.err.println("Invalid event type: " + conditionEntry.getKey() + " in emitter definition: " + emitterId);
+                continue;
             }
+
+            emitterDataBuilder = parseCondition(emitterId, event, conditionEntry.getValue().getAsJsonObject(), emitterDataBuilder);
+
+            EmitterRegistry.registerEmitter(event, emitterDataBuilder.build());
         }
     }
 
-    private Predicate<EmitterContext> parseConditionPredicate(EmitterEvent event, JsonObject conditionConfig) {
+    private EmitterDataBuilder parseCondition(Identifier emitterId, EmitterEvent event, JsonObject conditionConfig, EmitterDataBuilder emitterDataBuilder) {
+        Predicate<EmitterContext> conditionPredicate = null;
+
         if(event == EmitterEvent.ON_TILL || event == EmitterEvent.ON_FLATTEN || event == EmitterEvent.ON_STRIP || event == EmitterEvent.ON_ANIMATE_TICK) {
             if(conditionConfig.has("blocks")) {
-                return (ctx) -> {
+                conditionPredicate = (ctx) -> {
                     return BlockUtil.isValidBlock(conditionConfig.get("blocks").getAsJsonArray(), ctx.getOldBlock());
                 };
             }
             else if(conditionConfig.has("block")) {
-                return (ctx) -> {
+                conditionPredicate = (ctx) -> {
                     return BlockUtil.isValidBlock(conditionConfig.get("block").getAsString(), ctx.getOldBlock());
                 };
             }
         }
-        return (ctx) -> false;
+        if(conditionPredicate != null) {
+            emitterDataBuilder.setPredicate(conditionPredicate);
+        }
+
+        if(conditionConfig.has("probability")) {
+            emitterDataBuilder.setProbability(conditionConfig.get("probability").getAsFloat());
+        }
+
+        return emitterDataBuilder;
     }
 
     private EmitterDataBuilder parseShape(JsonObject shapeElement, EmitterDataBuilder emitterDataBuilder) {

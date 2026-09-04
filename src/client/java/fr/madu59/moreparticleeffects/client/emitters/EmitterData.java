@@ -9,12 +9,14 @@ import net.minecraft.resources.Identifier;
 public class EmitterData {
     private Identifier id;
     private Predicate<EmitterContext> predicate;
+    private float probability;
     private EmitterShape shape;
     private Vector3f size;
 
     public EmitterData(EmitterDataBuilder builder) {
         this.id = builder.id;
         this.predicate = builder.predicate;
+        this.probability = builder.probability;
         this.shape = builder.shape;
         this.size = builder.size;
     }
@@ -33,5 +35,9 @@ public class EmitterData {
 
     public Vector3f getSize() {
         return size;
+    }
+
+    public float getProbability() {
+        return probability;
     }
 }

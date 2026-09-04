@@ -11,6 +11,7 @@ public class EmitterDataBuilder {
     protected Predicate<EmitterContext> predicate = (ctx) -> true;
     protected EmitterShape shape = EmitterShape.CUBE;
     protected Vector3f size = new Vector3f(0, 0, 0);
+    protected float probability = 1.0f;
 
     public EmitterDataBuilder(Identifier id) {
         this.id = id;
@@ -33,6 +34,11 @@ public class EmitterDataBuilder {
 
     public EmitterDataBuilder setSize(float size) {
         this.size = new Vector3f(size, size, size);
+        return this;
+    }
+
+    public EmitterDataBuilder setProbability(float probability) {
+        this.probability = probability;
         return this;
     }
 
